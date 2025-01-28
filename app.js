@@ -22,7 +22,7 @@ const clientId = 'd2dd99251bd9480b81222d8e8b26f6dd'; // LyricS
 const clientSecret = 'c6948141c6814b08826dc09eda752ef3';  // LyricS
 // const clientSecret = 'cb373d236ee7436aedddcfbabdd9d9e';  // LyricS BP
 
-const redirectUri = 'http://owen.vayland.fr/auth/spotify/callback';
+const redirectUri = 'https://lyrics-online.onrender.com/auth/spotify/callback';
 
 app.get('/', (req, res) => {
   res.render('home');
