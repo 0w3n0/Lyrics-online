@@ -122,61 +122,6 @@
 
         <!-- Ajoutez d'autres statistiques ici -->
       </div>
-
-      <div class="recommended-tracks">
-        <h2 class="h2-title">Recommandations</h2>
-        <div class="tracks-container">
-          <% recommendedTracks.forEach(track=> { %>
-            <div class="track">
-              <div class="track-image">
-                <% if (track.album.images.length> 0) { %>
-                  <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
-                  <% } else { %>
-                    <img src="../images/user-defaut-pp.jpg" alt="<%= track.name %>">
-                    <% } %>
-              </div>
-              <div class="track-info">
-                <a href="/track/<%= track.id %>">
-                  <h2>
-                    <%= track.name %>
-                  </h2>
-                </a>
-                <% if (track.artists.length> 1) { %>
-                  <% track.artists.forEach((artist, index)=> { %>
-                    <% if (index===1) { %>
-                      ft. <a href="/artist/<%= artist.id %>">
-                        <%= artist.name %>
-                      </a>
-                      <% } else if (index===2) { %>
-                        , <a href="/artist/<%= artist.id %>">
-                          <%= artist.name %>
-                        </a>
-                        <% } else if (index===0) { %>
-                          <p>
-                            <a href="/artist/<%= artist.id %>">
-                              <%= artist.name %>
-                            </a>
-                            <% } %>
-                              <% }); %>
-                                - <%= track.album.name %>
-                          </p>
-                          <% } else { %>
-                            <p>
-                              <a href="/artist/<%= track.artists[0].id %>">
-                                <%= track.artists[0].name %>
-                              </a> - <%= track.album.name %>
-                            </p>
-                            <% } %>
-              </div>
-              <div class="track-duration">
-                <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000); const
-                  minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
-                  <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
-              </div>
-            </div>
-            <% }); %>
-        </div>
-      </div>
     </main>
 </body>
 

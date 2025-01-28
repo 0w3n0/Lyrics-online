@@ -167,32 +167,6 @@
                     </div>
                     <% }); %>
             </div>
-
-            <div class="recommended-artists">
-                <h2 class="h2-title">Recommandations</h2>
-                <div class="artists-container-home">
-                    <% recommendationArtists.artists.forEach(artist=> { %>
-                        <div class="artist-home">
-                            <a href="/artist/<%= artist.id %>">
-                                <div class="artist-image">
-                                    <% if(artist.images.length> 0) { %>
-                                        <img src="<%= artist.images[0].url %>" alt="<%= artist.name %>">
-                                        <% } else { %>
-                                            <img src="../images/user-defaut-pp.jpg" alt="<%= artist.name %>">
-                                            <% } %>
-                                </div>
-                                <div>
-                                    <h2 class="artist-name">
-
-                                        <%= artist.name %>
-
-                                    </h2>
-                                </div>
-                            </a>
-                        </div>
-                        <% }); %>
-                </div>
-            </div>
             </div>
             <!-- Ajoutez un lien vers la musique sur Spotify -->
         </main>

@@ -707,17 +707,13 @@ app.get('/track/:id', async (req, res) => {
 
     if (accessToken) {
       try {
-        const [trackDatas, recommendationsResponse, user_datas] = await Promise.all([
+        const [trackDatas, user_datas] = await Promise.all([
           axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`
             }
           }),
-          axios.get(`https://api.spotify.com/v1/recommendations?seed_tracks=${trackId}`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          }),
+          
           axios.get('https://api.spotify.com/v1/me', {
             headers: {
               'Authorization': `Bearer ${accessToken}`
@@ -728,7 +724,6 @@ app.get('/track/:id', async (req, res) => {
         const pp = user_datas.data;
         const trackDatasInfos = trackDatas.data;
         const displayName = user.displayName;
-        const recommendedTracks = recommendationsResponse.data.tracks;
 
         axios.get('https://api.spotify.com/v1/me', {
           headers: {
@@ -743,7 +738,7 @@ app.get('/track/:id', async (req, res) => {
             console.error('Erreur lors de la récupération du pseudonyme de l\'utilisateur :', error);
           });
 
-        res.render('trackDetails', { trackDatasInfos, recommendedTracks, displayName, pp });
+        res.render('trackDetails', { trackDatasInfos, displayName, pp });
       } catch (error) {
         if (error.response && error.response.status === 429) {
           // L'erreur est due à trop de requêtes, vérifions s'il y a un délai recommandé
@@ -848,17 +843,13 @@ app.get('/artist/:id', async (req, res) => {
 
     if (accessToken) {
       try {
-        const [ArtistInfosResponse, ArtistrecommendationsResponse, ArtistTopTracksResponse, user_datas] = await Promise.all([
+        const [ArtistInfosResponse, ArtistTopTracksResponse, user_datas] = await Promise.all([
           axios.get(`https://api.spotify.com/v1/artists/${artistId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`
             }
           }),
-          axios.get(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`
-            }
-          }),
+          
           axios.get(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?market=FR`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`
@@ -874,11 +865,10 @@ app.get('/artist/:id', async (req, res) => {
         const pp = user_datas.data;
         const ArtistInfos = ArtistInfosResponse.data;
         const TopTracks = ArtistTopTracksResponse.data;
-        const recommendationArtists = ArtistrecommendationsResponse.data;
         const displayName = user.displayName;
         console.log(TopTracks);
 
-        res.render('artistDetails', { ArtistInfos, recommendationArtists, TopTracks, displayName, pp });
+        res.render('artistDetails', { ArtistInfos, TopTracks, displayName, pp });
       } catch (error) {
         console.error('Erreur lors de la récupération des top tracks de l\'artiste:', error);
         res.status(500).send('Erreur lors de la récupération des top tracks de l\'artiste');
