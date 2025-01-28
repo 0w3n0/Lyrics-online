@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenue sur LyricS</title>
+    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <main id="homepage">
+        <div>
+            <h1>LyricS</h1>
+            <a href="#" class="original-button" onclick="openSpotifyCallback()">Se lancer</a>
+        </div>
+        <div id="sub-button">
+            <p>Créez. Consultez. Découvrez. <br />Tout ça de façon pratique.</p>
+        </div>
+    </main>
+    <script>
+
+        var hours = 1;
+        var now = new Date().getTime();
+        var setupTime = localStorage.getItem('setupTime');
+        if (setupTime == null) {
+            localStorage.setItem('setupTime', now)
+        } else {
+            if(now-setupTime > hours*60*60*1000) {
+                localStorage.clear();
+                localStorage.setItem('setupTime', now);
+            }
+        }
+
+        const isLog = localStorage.getItem("token");
+        if(isLog){
+            window.location.href = '/home?token='+isLog;
+        }
+
+        const npxPlugins = Plugins.Capacitor();
+
+ // Écouter le deep link
+    /*npxPlugins.App.addListener('appUrlOpen', (data) => {
+    try {
+        console.log('App URL Open:', data.url);
+        // Vérifiez si le deep link correspond à l'authentification réussie
+        if (data.url.includes("auth/spotify/callback")) {  // Remplacez "myapp" par le schéma que vous avez défini dans votre configuration Capacitor
+        // L'authentification est réussie, effectuez les actions nécessaires côté client
+        // Par exemple, redirigez vers la page "/top-tracks"
+        console.log("ICI");
+        window.location.href = 'lyrics://top-tracks';
+        }
+    } catch (error) {
+        console.error('Erreur côté client:', error);
+    }
+    });*/
+
+        npxPlugins.App.addListener('appUrlOpen', data => {
+            const fakeUrl = `http://${data.url}`;
+            const urlObject = new URL(fakeUrl);
+            const urlParams = new URLSearchParams(urlObject.search);
+            const token = urlParams.get('spotify');
+            if (token) {
+                localStorage.setItem("token", token);
+                window.location.href = '/home?token='+token;
+            } else {
+                console.log('Aucun token trouvé dans l\'URL');
+            }
+
+        });
+
+        const openSpotifyCallback = async () => {
+            const url = 'http://owen.vayland.fr/auth/spotify';
+            await npxPlugins.Browser.open({ url, windowName: '_system' });
+        };
+
+    // npxPlugins.Browser.addListener('message', async (event) => {
+    //     if (event.data.type === 'AUTH_SUCCESS' && event.data.url.includes('/auth/spotify/callback')) {
+    //         console.log('Authentification Spotify terminée avec succès');
+
+    //         // Redirection vers la vue EJS index au lieu de l'envoi de données JSON
+    //         // res.render('/top-tracks'); // Assurez-vous que 'index' correspond au nom de votre fichier EJS
+    //         alert("Authentification réussie. Veuillez fermer manuellement cette fenêtre.");
+    //         // Note: Vous pouvez toujours ajouter des actions supplémentaires ici si nécessaire, mais l'envoi de données JSON a été remplacé par la redirection vers la vue EJS
+
+    //         console.log('Avant la fermeture');
+    //         await npxPlugins.Browser.close();
+    //         console.log('Après la fermeture');
+    //     }
+    // });
+
+    </script>
+</body>
+
+</html>

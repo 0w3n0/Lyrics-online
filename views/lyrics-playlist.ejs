@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Tracks</title>
+    <!-- <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css"> -->
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+    <main>
+        <h1>LyricS Playlist</h1>
+        
+        <button class="btn-add-playlist" onclick="clearPlaylist('<%= playlistId %>')">Vider la playlist</button>
+        <button id="redirect_playlist_btn" class="btn-add-playlist"><a href="https://open.spotify.com/playlist/<%= playlistId %>" target="_blank">Écouter sur Spotify</a></button>
+
+        <% if (playlist && playlist.length > 0) { %>
+            <div>
+            <% playlist.forEach(song => { %>
+                <div class="track">
+                    <div class="track-image">
+                        <img src="<%= song.cover %>" alt="<%= song.name %>">
+                    </div>
+                    <div class="track-info">
+                        <li>
+                            <a href="/track/<%= song.id %>"><h2>
+                                <%= song.name %>
+                            </h2></a>
+                        </li>
+                        <% if (song.artists.length> 1) { %>
+                            <% song.artists.forEach((artist, index)=> { %>
+                                <% if (index===1) { %>
+                                    ft. <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                <% } else if (index===2) { %>
+                                    , <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                <% } else if (index===0) { %>
+                                    <p>
+                                        <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                <% } %>
+                            <% }); %>
+                                - <%= song.name %>
+                            </p>
+                        <% } else { %>
+                                <p>
+                                    <a href="/artist/<%= song.artists[0].id %>"><%= song.artists[0].name %></a> - <%= song.name %>
+                                </p>
+                        <% } %>
+                    </div>
+                    <div>
+                        <button class="btn-add-playlist-single" onclick="deleteSong('<%= song.id %>', '<%= playlistId %>')"><i class="menu-icon ion-md-home"></i>
+                            <span class="menu-name" style="width: 16px;">
+                            <i class="material-icons" style="
+                                display: flex;
+                                justify-content: flex-end;
+                                padding-left: 20px;
+                            ">close</i></span>
+                        </button>                                                
+                    </div>
+                </div>
+            <% }); %>
+            </div>
+        <% } else { %>
+            <div class="center-none"><p>Aucune chanson dans la playlist.</p></div>
+        <% } %>
+    </main>
+
+<script>
+    async function deleteSong(songId, playlistId) {
+        try {
+            console.log('Song ID:', songId, playlistId);
+
+            // Utilisez l'API Fetch pour envoyer une requête DELETE
+            const response = await fetch(`/delete/${playlistId}/${songId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            });
+
+            // Assurez-vous que la requête s'est terminée avec succès (statut 200 OK)
+            if (response.ok) {
+            console.log('Chanson supprimée avec succès');
+            // Recharger la page après la suppression réussie
+            location.reload();
+            } else {
+            // Gérer les erreurs de manière appropriée
+            console.error('Erreur lors de la suppression de la chanson:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression de la chanson:', error);
+            // Gérer l'erreur de manière appropriée (afficher un message, etc.)
+        }
+    }
+
+    async function clearPlaylist(playlistId) {
+        try {
+            const response = await fetch(`/clear-playlist/${playlistId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            });
+
+            if (!response.ok) {
+            throw new Error(`Erreur lors de la suppression de toutes les chansons de la playlist : ${response.statusText}`);
+            }
+
+            location.reload();
+            console.log('Playlist vidée avec succès');
+        } catch (error) {
+            console.error(error.message);
+            throw error;
+        }
+    }
+
+    const hey = <%- JSON.stringify(playlist) %>;;
+  </script>
+  
+  <style>
+    .btn-add-playlist{
+        display: flex;
+        justify-content: center;
+        width: 50vw;
+        border: 3px solid white;
+        border-radius: 90px;
+        background: black;
+        color: white;
+        border-radius: 90px;
+        align-items: center;
+        padding: 10px;
+        margin: 0 auto 4vh auto;
+    }
+
+    .btn-add-playlist a{
+        color: white;
+    }
+
+    #redirect_playlist_btn {
+        position: fixed;
+        bottom: 7vh;
+        display: flex;
+        left: 25vw;
+        background-color: greenyellow;
+        border-color: black;
+    }
+
+    #redirect_playlist_btn a{
+        color: black;
+    }
+
+    .btn-add-playlist-single{
+        display: flex;
+        justify-content: center;
+        border: 3px solid #f68c8c;
+        border-radius: 90px;
+        background: black;
+        color: white;
+        border-radius: 50%;
+        align-items: center;
+        padding: 10px;
+        width: 12vw;
+        height: 12vw;
+        margin: auto 10px;
+    }
+
+    main{
+        padding: 5rem 0px 10rem 0px;
+    }
+
+    html{
+        background-color: rgb(240, 232, 117);
+    }
+
+    .center-none{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30vh;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    h1{
+        text-align: center;
+        padding: 7rem 0;
+    }
+
+  </style>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>

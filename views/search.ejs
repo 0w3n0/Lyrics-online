@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <!-- <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css"> -->
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+
+<body>
+
+    <%- include('header.ejs') %>
+        <main>
+            <div class="form__group field">
+                <input type="input" class="form__field" placeholder="Rechercher..." name="name" id='search-input' />
+                <label for="name" class="form__label" style="z-index: -1;">Rechercher...</label>            
+            </div>
+
+            <div>
+                <div id="results-artists-container" class="artists-container"></div>
+
+                <div id="results-albums-container" class="artists-container"></div>
+
+                <div id="results-container" class="tracks-container"></div>
+            </div>
+        </main>
+
+        <style>
+            .titleSection {
+                margin-bottom: 1vh;
+            }
+        </style>
+
+        <script>
+            // Écoutez les changements dans le champ de recherche
+            document.querySelector('#search-input').addEventListener('input', function (event) {
+                const query = event.target.value;
+
+                // Vérifiez si la requête est assez longue pour valider la recherche
+                if (query.length >= 3) {
+                    searchSpotify(query);
+                }
+            });
+
+            // Fonction pour effectuer la recherche Spotify
+            function searchSpotify(query) {
+                const apiUrl = `https://api.spotify.com/v1/search?q=${query}&type=track,artist,album&limit=10&market=FR`;
+
+                fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer <%= accessToken %>`
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Traitez les données de réponse et mettez à jour l'interface utilisateur
+                        displaySearchResults(data);
+                    })
+                    .catch(error => console.error('Erreur lors de la recherche Spotify:', error));
+            }
+
+            // Fonction pour afficher les résultats de la recherche
+            function displaySearchResults(data) {
+                const resultsContainer = document.querySelector('#results-container');
+                const artistsContainer = document.querySelector('#results-artists-container');
+                const albumsContainer = document.querySelector('#results-albums-container');
+                resultsContainer.innerHTML = '';
+                artistsContainer.innerHTML = '';
+                albumsContainer.innerHTML = '';
+
+                const titleSectionResult = document.createElement('h4');
+                const titleSectionArtist = document.createElement('h4');
+                const titleSectionAlbum = document.createElement('h4');
+
+                // Créez un nouvel élément span
+                var spanElement = document.createElement('span');
+                spanElement.style.color = "mistyrose";
+                // Définissez le contenu du span
+                spanElement.textContent = 'Musiques...';
+                // Ajoutez le span à l'élément titleSectionArtist
+                titleSectionResult.appendChild(document.createTextNode('Résultats pour ')); // Ajoutez le texte "Résultats pour "
+                titleSectionResult.appendChild(spanElement);
+                
+                // Créez un nouvel élément span
+                var spanElement = document.createElement('span');
+                spanElement.style.color = "mistyrose";
+                // Définissez le contenu du span
+                spanElement.textContent = 'Artistes...';
+                // Ajoutez le span à l'élément titleSectionArtist
+                titleSectionArtist.appendChild(document.createTextNode('Résultats pour ')); // Ajoutez le texte "Résultats pour "
+                titleSectionArtist.appendChild(spanElement);
+
+                // Créez un nouvel élément span
+                var spanElement = document.createElement('span');
+                spanElement.style.color = "mistyrose";
+                // Définissez le contenu du span
+                spanElement.textContent = 'Albums...';
+                // Ajoutez le span à l'élément titleSectionArtist
+                titleSectionAlbum.appendChild(document.createTextNode('Résultats pour ')); // Ajoutez le texte "Résultats pour "
+                titleSectionAlbum.appendChild(spanElement);
+                
+                resultsContainer.appendChild(titleSectionResult);
+                artistsContainer.appendChild(titleSectionArtist);
+                albumsContainer.appendChild(titleSectionAlbum);
+
+                titleSectionResult.classList.add('titleSection');
+                titleSectionArtist.classList.add('titleSection');
+                titleSectionAlbum.classList.add('titleSection');
+
+                const tracks = data.tracks.items;
+
+                tracks.forEach(track => {
+                    const trackElement = document.createElement('div');
+                    trackElement.classList.add('track');
+
+                    const trackImage = document.createElement('div');
+                    trackImage.classList.add('track-image');
+                    const trackImageTag = document.createElement('img');
+                    trackImageTag.src = track.album.images[0].url;
+                    trackImageTag.alt = track.name;
+                    trackImage.appendChild(trackImageTag);
+
+                    const trackInfo = document.createElement('div');
+                    trackInfo.classList.add('track-info');
+
+                    const trackNameLink = document.createElement('a');
+                    trackNameLink.href = `/track/${track.id}`;
+                    const trackName = document.createElement('h2');
+                    trackName.innerText = track.name;
+                    trackNameLink.appendChild(trackName);
+
+                    const trackArtists = document.createElement('p');
+                    const artistsList = track.artists.map(artist => `<a href="/artist/${artist.id}">${artist.name}</a>`);
+                    trackArtists.innerHTML = artistsList.join(', ');
+
+                    trackInfo.appendChild(trackNameLink);
+                    trackInfo.appendChild(trackArtists);
+
+                    const trackDuration = document.createElement('div');
+                    trackDuration.classList.add('track-duration');
+
+                    const durationMs = track.duration_ms;
+                    const durationSeconds = Math.floor(durationMs / 1000);
+                    const minutes = Math.floor(durationSeconds / 60);
+                    const seconds = durationSeconds % 60;
+                    trackDuration.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    trackElement.appendChild(trackImage);
+                    trackElement.appendChild(trackInfo);
+                    trackElement.appendChild(trackDuration);
+
+                    resultsContainer.appendChild(trackElement);
+                });
+
+                const artists = data.artists.items;
+
+                artists.forEach(artist => {
+                    const artistElement = document.createElement('div');
+                    artistElement.classList.add('artist');
+
+                    const hrefname = document.createElement('a');
+                    hrefname.href = `/artist/${artist.id}`;
+
+                    const artistName = document.createElement('p');
+                    artistName.classList.add('artist-name'); // Ajoutez cette classe si nécessaire
+                    artistName.innerText = artist.name;
+
+                    const artistImage = document.createElement('div');
+                    artistImage.classList.add('artist-image');
+                    // Vérifier si la piste a des images
+                    if (artist.images.length > 0) {
+                        const artistImageTag = document.createElement('img');
+                        artistImageTag.src = artist.images[0].url;
+                        artistImageTag.alt = artist.name;
+                        artistImage.appendChild(artistImageTag);
+                    }
+
+                    else {
+                        const artistImageTag = document.createElement('img');
+                        artistImageTag.src = "../images/user-defaut-pp.jpg";
+                        artistImageTag.alt = artist.name;
+                        artistImage.appendChild(artistImageTag);
+                    }
+
+                    artistElement.appendChild(hrefname);
+                    hrefname.appendChild(artistImage);
+                    hrefname.appendChild(artistName);
+
+
+                    artistsContainer.appendChild(artistElement);
+                });
+
+                const albums = data.albums.items;
+
+                albums.forEach(album => {
+                    const albumElement = document.createElement('div');
+                    albumElement.classList.add('artist');
+
+                    const hrefname = document.createElement('a');
+                    hrefname.href = `/album/${album.id}`;
+
+                    const albumName = document.createElement('p');
+                    albumName.classList.add('artist-name'); // Ajoutez cette classe si nécessaire
+                    albumName.innerText = album.name;
+
+                    const albumImage = document.createElement('div');
+                    albumImage.classList.add('artist-image');
+                    // Vérifier si la piste a des images
+                    if (album.images.length > 0) {
+                        const albumImageTag = document.createElement('img');
+                        albumImageTag.src = album.images[0].url;
+                        albumImageTag.alt = album.name;
+                        albumImage.appendChild(albumImageTag);
+                    }
+
+                    else {
+                        const albumImageTag = document.createElement('img');
+                        albumImageTag.src = "../images/user-defaut-pp.jpg";
+                        albumImageTag.alt = album.name;
+                        albumImage.appendChild(albumImageTag);
+                    }
+
+                    albumElement.appendChild(hrefname);
+                    hrefname.appendChild(albumImage);
+                    hrefname.appendChild(albumName);
+
+
+                    albumsContainer.appendChild(albumElement);
+                });
+            }
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+</body>
+
+</html>

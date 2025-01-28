@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la musique</title>
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+    <%- include('header.ejs') %>
+
+        <main id="TDetails">
+
+            <!-- <h1>Détails de la musique</h1> -->
+            <!-- Affichez les détails de la musique ici -->
+
+            <div class="track-image-details">
+                <img src="<%= ArtistInfos.images[0].url %>" alt="<%= ArtistInfos.name %>">
+                <h2 class="h2-title">
+                    <%= ArtistInfos.name %>
+                </h2>
+                <!-- 
+                <i class="material-icons subscribe-icon artist_datas" data-artist-id="<%= ArtistInfos.id %>"
+                    style="z-index: 10; color: white;">library_add</i> -->
+
+                <button class="btn-add-playlist-single artist_datas" data-artist-id="<%= ArtistInfos.id %>">
+                    <span class="menu-name" style="width: 16px;">
+                        <i class="material-icons subscribe-icon" style="
+                            display: flex;
+                            justify-content: flex-end;
+                            padding-left: 20px;
+                        ">close</i></span>
+                </button>
+            </div>
+            <style>
+                #TDetails {
+                    position: relative;
+                    /* width: 500px;
+                  height: 300px; */
+                    background: no-repeat center center;
+                    background-image: url('<%= ArtistInfos.images[0].url %>');
+                    background-size: cover;
+                    background-attachment: fixed;
+                }
+
+                #TDetails::after {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    backdrop-filter: blur(10px);
+                    pointer-events: none;
+                    top: 0;
+                }
+
+                .button-container,
+                .tracks-container,
+                .recommended-artists,
+                h2 {
+                    z-index: 10;
+                    position: relative;
+                }
+
+                .track-image-details {
+                    background-color: transparent;
+                }
+
+                .h2-title {
+                    color: white;
+                }
+
+                .artist-home {
+                    background: rgba(222, 245, 229);
+                }
+
+                .track-image-details p {
+                    color: whitesmoke;
+                    z-index: 1;
+                    font-size: 1rem;
+                    text-shadow: -2px -2px 2px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
+                }
+
+                .track-image-details h2 {
+                    z-index: 1;
+                    font-size: 1.25rem;
+
+                }
+
+                .h2-title {
+                    margin: 0px 3vw 0px 3vw;
+                    text-shadow: -2px -2px 2px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
+                }
+
+                .btn-add-playlist-single {
+                    display: flex;
+                    justify-content: center;
+                    border: 3px solid white;
+                    border-radius: 90px;
+                    background: black;
+                    color: white;
+                    border-radius: 50%;
+                    align-items: center;
+                    padding: 10px;
+                    width: 12vw;
+                    height: 12vw;
+                    z-index: 1;
+                }
+            </style>
+
+            <!-- Ajoutez un lien vers la musique sur Spotify -->
+            <div class="button-container" style="margin: 4vh; z-index: 10;">
+                <button class="spotify-button"><a href="<%= ArtistInfos.external_urls.spotify %>">Voir sur
+                        Spotify</a></button>
+            </div>
+
+            <h2 class="h2-title">Musiques les plus écoutées</h2>
+            <div class="tracks-container">
+
+                <% TopTracks.tracks.forEach(track=> { %>
+                    <div class="track">
+                        <div class="track-image">
+                            <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                        </div>
+                        <div class="track-info">
+                            <a href="/track/<%= track.id %>">
+                                <h2>
+                                    <%= track.name %>
+                                </h2>
+                            </a>
+                            <% if (track.artists.length> 1) { %>
+                                <% track.artists.forEach((artist, index)=> { %>
+                                    <% if (index===1) { %>
+                                        ft. <a href="/artist/<%= artist.id %>">
+                                            <%= artist.name %>
+                                        </a>
+                                        <% } else if (index===2) { %>
+                                            , <a href="/artist/<%= artist.id %>">
+                                                <%= artist.name %>
+                                            </a>
+                                            <% } else if (index===0) { %>
+                                                <p>
+                                                    <a href="/artist/<%= artist.id %>">
+                                                        <%= artist.name %>
+                                                    </a>
+                                                    <% } %>
+                                                        <% }); %>
+                                                            - <%= track.album.name %>
+                                                </p>
+                                                <% } else { %>
+                                                    <p>
+                                                        <a href="/artist/<%= track.artists[0].id %>">
+                                                            <%= track.artists[0].name %>
+                                                        </a> - <%= track.album.name %>
+                                                    </p>
+                                                    <% } %>
+                        </div>
+                        <div class="track-duration">
+                            <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000);
+                                const minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
+                                <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+
+            <div class="recommended-artists">
+                <h2 class="h2-title">Recommandations</h2>
+                <div class="artists-container-home">
+                    <% recommendationArtists.artists.forEach(artist=> { %>
+                        <div class="artist-home">
+                            <a href="/artist/<%= artist.id %>">
+                                <div class="artist-image">
+                                    <% if(artist.images.length> 0) { %>
+                                        <img src="<%= artist.images[0].url %>" alt="<%= artist.name %>">
+                                        <% } else { %>
+                                            <img src="../images/user-defaut-pp.jpg" alt="<%= artist.name %>">
+                                            <% } %>
+                                </div>
+                                <div>
+                                    <h2 class="artist-name">
+
+                                        <%= artist.name %>
+
+                                    </h2>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+            </div>
+            <!-- Ajoutez un lien vers la musique sur Spotify -->
+        </main>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const artists = document.querySelectorAll('.artist_datas');
+
+                artists.forEach(artist => {
+                    // Au chargement de la page, vérifiez si l'artiste est suivi
+                    checkIfArtistIsSubscribed(artist);
+
+                    // Ajoutez un gestionnaire de clic sur l'élément de l'artiste
+                    artist.addEventListener('click', function () {
+
+                        const artistId = artist.getAttribute('data-artist-id');
+                        const isSubscribed = artist.getAttribute('data-sub') === 'true';
+
+                        console.log("status : " + artist.getAttribute('data-sub'));
+
+                        if (isSubscribed) {
+                            // Si déjà abonné, effectuez la désinscription
+                            unfollowArtist(artistId, this);
+                            afficherMessage("Désabonnement Réussi");
+                        } else {
+                            // Sinon, effectuez l'abonnement
+                            followArtist(artistId, this);
+                            afficherMessage("Abonnement Réussi");
+                        }
+                    });
+                });
+            });
+
+            function checkIfArtistIsSubscribed(artistElement) {
+                if (!(artistElement instanceof HTMLElement)) {
+                    console.error('Invalid artist element:', artistElement);
+                    return Promise.reject(new Error('Invalid artist element'));
+                }
+
+                const artistId = artistElement.getAttribute('data-artist-id');
+                console.log("artistId" + artistId);
+
+                // Return a Promise that resolves with true or false
+                return new Promise((resolve, reject) => {
+                    // Effectuez une requête API pour vérifier si l'artiste est suivi
+                    fetch('/check-following')
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("data : " + data);
+
+                            // Vérifiez si l'artiste actuel est dans la liste des artistes suivis
+                            const isSubscribed = Array.isArray(data.artists) && data.artists.some(artist => artist.id === artistId);
+                            artistElement.setAttribute('data-sub', isSubscribed.toString());
+                            updateSubscribeIcon(isSubscribed);
+
+                            resolve(isSubscribed);
+                        })
+                        .catch(error => {
+                            console.error('Erreur lors de la récupération des artistes suivis :', error.message);
+                            reject(error);
+                        });
+                });
+            }
+
+
+            function followArtist(artistId, artistElement) {
+                // Use the checkIfArtistIsSubscribed function to get the subscription status
+                checkIfArtistIsSubscribed(artistElement)
+                    .then(isSubscribed => {
+                        console.log("isSub " + isSubscribed);
+
+                        // Effectuez une requête API pour s'abonner à l'artiste
+                        fetch('/follow-artist', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ artistId }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+
+
+                                console.log("issub22222" + isSubscribed);
+
+                                // Check if artistElement is defined before calling setAttribute
+                                if (artistElement) {
+                                    isSubscribed = !isSubscribed;
+                                    // Mettez à jour l'attribut data-sub en conséquence
+                                    artistElement.setAttribute('data-sub', isSubscribed.toString());
+                                    updateSubscribeIcon(isSubscribed);
+                                    console.log("c'est bon, tu es abonné");
+                                } else {
+                                    console.error('artistElement is undefined or null');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors de l\'abonnement à l\'artiste :', error.message);
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la vérification de l\'abonnement à l\'artiste :', error.message);
+                    });
+            }
+
+            function unfollowArtist(artistId, artistElement) {
+                // Use the checkIfArtistIsSubscribed function to get the subscription status
+                checkIfArtistIsSubscribed(artistElement)
+                    .then(isSubscribed => {
+                        console.log(isSubscribed);
+
+                        // Effectuez une requête API pour se désabonner de l'artiste
+                        fetch('/unfollow-artist', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ artistId }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+
+
+                                // Check if artistElement is defined before calling setAttribute
+                                if (artistElement) {
+                                    isSubscribed = !isSubscribed;
+                                    // Mettez à jour l'attribut data-sub en conséquence
+                                    artistElement.setAttribute('data-sub', isSubscribed.toString());
+                                    updateSubscribeIcon(isSubscribed);
+                                    console.log("c'est bon, tu n'es plus abonné");
+                                } else {
+                                    console.error('artistElement is undefined or null');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erreur lors du désabonnement de l\'artiste :', error.message);
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la vérification du désabonnement de l\'artiste :', error.message);
+                    });
+            }
+
+            function updateSubscribeIcon(isSubscribed) {
+                // Mettez à jour l'icône en fonction de l'état d'abonnement
+                const icon = document.querySelector('.subscribe-icon');
+                icon.textContent = isSubscribed ? 'remove_circle_outline' : 'library_add';
+            }
+        </script>
+
+        <div id="successMessage" class="animate__animated">Ajouté avec succès</div>
+
+        <script>
+        function afficherMessage(jesuislemsg) {
+            var message = document.getElementById('successMessage');
+
+            message.innerText = jesuislemsg;
+            
+            // Afficher le message
+            message.style.opacity = '1';
+
+            // Disparaître après 3 secondes
+            setTimeout(function() {
+                
+                message.style.opacity = '0';
+
+            }, 1000);
+        }
+
+        </script>
+        <style>
+        /* Style du message temporaire */
+        #successMessage {
+            position: fixed;
+            top: calc(7vh + 4vh);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            text-align: center;
+            width: 60vw;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 3;
+        }
+        </style>
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails de la musique</title>
+  <link rel="stylesheet" href="/css/h.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+  <%- include('header.ejs') %>
+
+    <main id="TDetails">
+
+      <!-- <h1>Détails de la musique</h1> -->
+      <!-- Affichez les détails de la musique ici -->
+      <div class="track-image-details">
+        <img src="<%= trackDatasInfos.album.images[0].url %>" alt="<%= trackDatasInfos.name %>">
+        <h2 class="h2-title">
+          <%= trackDatasInfos.name %>
+        </h2>
+        <% if (trackDatasInfos.artists.length> 1) { %>
+          <% trackDatasInfos.artists.forEach((artist, index)=> { %>
+            <% if (index===1) { %>
+              ft. <%= artist.name %>
+                <% } else if (index===2) { %>
+                  , <%= artist.name %>
+                    <% } else if (index===0) { %>
+                      <p>
+                        <%= artist.name %>
+                          <% } %>
+                            <% }); %>
+                              <h4>
+                                <%= trackDatasInfos.album.name %>
+                              </h4>
+                      </p>
+                      <% } else { %>
+                        <p>
+                          <%= trackDatasInfos.artists[0].name %>
+                        </p>
+                        <p>
+                          <%= trackDatasInfos.album.name %>
+                        </p>
+                        <% } %>
+                          <!-- <p><% trackDatasInfos.artists.forEach(artist=> { %> <%= artist.name %> 
+        <% }); %></p> -->
+      </div>
+      <style>
+        #TDetails {
+          position: relative;
+          /* width: 500px;
+                  height: 300px; */
+          background: no-repeat center center;
+          background-image: url('<%= trackDatasInfos.album.images[0].url %>');
+          background-size: cover;
+          background-attachment: fixed;
+        }
+
+        #TDetails::after {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backdrop-filter: blur(10px);
+          pointer-events: none;
+          top: 0;
+        }
+
+        .button-container,
+        .tracks-container,
+        .track-infos-datas,
+        .recommended-artists,
+        h2 {
+          z-index: 10;
+          position: relative;
+        }
+
+        .track-image-details {
+          background-color: transparent;
+        }
+
+        .h2-title {
+          color: white;
+        }
+
+        .track-image-details p {
+          color: whitesmoke;
+          z-index: 1;
+          font-size: 1rem;
+          text-shadow: -2px -2px 2px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
+        }
+
+        .track-image-details h2 {
+          z-index: 1;
+          font-size: 1.25rem;
+
+        }
+
+        .h2-title {
+          margin: 0px 3vw 0px 3vw;
+          text-shadow: -2px -2px 2px #000, 2px -2px 2px #000, -2px 2px 2px #000, 2px 2px 2px #000;
+        }
+      </style>
+
+      <div class="track-infos-datas">
+        <h2>
+          <%= trackDatasInfos.name %>
+        </h2>
+        <p>Auteur(s): <% trackDatasInfos.artists.forEach(artist=> { %> <%= artist.name %>
+              <% }); %>
+        </p>
+
+        <!-- Ajoutez un lien vers la musique sur Spotify -->
+        <div class="button-container">
+          <button class="spotify-button"><a href="<%= trackDatasInfos.external_urls.spotify %>">Écouter sur
+              Spotify</a></button>
+        </div>
+
+        <!-- Ajoutez d'autres statistiques ici -->
+      </div>
+
+      <div class="recommended-tracks">
+        <h2 class="h2-title">Recommandations</h2>
+        <div class="tracks-container">
+          <% recommendedTracks.forEach(track=> { %>
+            <div class="track">
+              <div class="track-image">
+                <% if (track.album.images.length> 0) { %>
+                  <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                  <% } else { %>
+                    <img src="../images/user-defaut-pp.jpg" alt="<%= track.name %>">
+                    <% } %>
+              </div>
+              <div class="track-info">
+                <a href="/track/<%= track.id %>">
+                  <h2>
+                    <%= track.name %>
+                  </h2>
+                </a>
+                <% if (track.artists.length> 1) { %>
+                  <% track.artists.forEach((artist, index)=> { %>
+                    <% if (index===1) { %>
+                      ft. <a href="/artist/<%= artist.id %>">
+                        <%= artist.name %>
+                      </a>
+                      <% } else if (index===2) { %>
+                        , <a href="/artist/<%= artist.id %>">
+                          <%= artist.name %>
+                        </a>
+                        <% } else if (index===0) { %>
+                          <p>
+                            <a href="/artist/<%= artist.id %>">
+                              <%= artist.name %>
+                            </a>
+                            <% } %>
+                              <% }); %>
+                                - <%= track.album.name %>
+                          </p>
+                          <% } else { %>
+                            <p>
+                              <a href="/artist/<%= track.artists[0].id %>">
+                                <%= track.artists[0].name %>
+                              </a> - <%= track.album.name %>
+                            </p>
+                            <% } %>
+              </div>
+              <div class="track-duration">
+                <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000); const
+                  minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
+                  <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
+              </div>
+            </div>
+            <% }); %>
+        </div>
+      </div>
+    </main>
+</body>
+
+</html>

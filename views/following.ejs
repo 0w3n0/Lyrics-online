@@ -1,0 +1,105 @@
+<!-- Utilisez cette vue pour afficher la liste des artistes suivis -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la musique</title>
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+    <%- include('header.ejs') %>
+
+        <main class="following-main">
+            <div style="width: 100vw; margin: 0px 3vw 0px 3vw; text-align: center; padding: 7rem 0; display: flex; flex-direction: column; align-items: center;">
+                <h2 class="h2-title" style="margin: 3vw 45px 3vw">Artistes suivis</h2>
+                <p style="width: 62vw">Gérer vos abonnements directement sur cette page !</p>
+            </div>
+            <div class="artists-container-home">
+                <% artists.forEach(artist=> { %>
+                    <div class="artist-home">
+                        <a href="/artist/<%= artist.id %>">
+                            <i class="material-icons ish" onclick="unfollowArtist('<%= artist.id %>')">close</i>
+                            <div class="artist-image">
+                                <% if(artist.images.length> 0) { %>
+                                    <img src="<%= artist.images[0].url %>" alt="<%= artist.name %>">
+                                    <% } else { %>
+                                        <img src="../images/user-defaut-pp.jpg" alt="<%= artist.name %>">
+                                        <% } %>
+                            </div>
+                            <div>
+                                <h2 class="artist-name">
+                                    <%= artist.name %>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+            </div>
+        </main>
+
+        <style>
+            html{
+                background-color: #FAC898;
+            }
+
+        </style>
+        <script>
+            // Fonction pour se désabonner d'un artiste
+            async function unfollowArtist(artistId) {
+                try {
+                    const response = await fetch('/unfollow-artist', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ artistId })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Mettez à jour la vue après s'être désabonné de l'artiste
+                        location.reload();
+                    } else {
+                        console.error('Erreur lors du désabonnement de l\'artiste :', result.error);
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du désabonnement de l\'artiste :', error);
+                }
+            }
+
+            // async function followArtist(artistId) {
+            //     try {
+            //         const response = await fetch('/follow-artist', {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json'
+            //             },
+            //             body: JSON.stringify({ artistId })
+            //         });
+
+            //         const result = await response.json();
+
+            //         if (result.success) {
+            //             // Mettez à jour la vue après s'être désabonné de l'artiste
+            //             location.reload();
+            //         } else {
+            //             console.error('Erreur lors du désabonnement de l\'artiste :', result.error);
+            //         }
+            //     } catch (error) {
+            //         console.error('Erreur lors du désabonnement de l\'artiste :', error);
+            //     }
+            // }
+        </script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
+</html>

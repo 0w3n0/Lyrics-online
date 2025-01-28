@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la musique</title>
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+
+
+
+    <main id="TDetails">
+
+        <!-- <h1>Détails de la musique</h1> -->
+        <!-- Affichez les détails de la musique ici -->
+
+        <div class="track-image-details">
+            <img class="ppquipp" src="../images/logo_lyrics.png" alt="">
+            <h2>Oups.... Une erreur est survenue.</h2>
+            <button class="btn-add-playlist">
+                <span><a href="/">Revenir en lieu sûr</a></span>
+            </button>
+        </div>
+        <style>
+            body {
+                overflow: hidden;
+            }
+
+            #TDetails {
+                position: relative;
+                /* width: 500px;
+                  height: 300px; */
+                background: no-repeat center center;
+
+                background-size: cover;
+                background-attachment: fixed;
+            }
+
+            #TDetails::after {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                top: 0;
+            }
+
+            .button-container,
+            .tracks-container,
+            .recommended-artists,
+            h2 {
+                z-index: 10;
+                position: relative;
+            }
+
+            .track-image-details {
+                height: 100vh;
+                width: 100vw;
+                background: mistyrose;
+                display: flex;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+
+            .track-image-details h2 {
+                color: black;
+            }
+
+            .track-image-details img {
+                border-radius: 50%;
+                width: 150px;
+                min-width: 150px;
+                height: 150px;
+                min-height: 150px;
+                margin: 0 auto;
+                z-index: 1;
+            }
+
+            .artist-home {
+                background: rgba(222, 245, 229);
+            }
+
+            .btn-add-playlist{
+                display: flex;
+                justify-content: center;
+                width: 50vw;
+                border: 3px solid white;
+                border-radius: 90px;
+                background: black;
+                color: white;
+                border-radius: 90px;
+                align-items: center;
+                padding: 10px;
+                margin: 0 auto 4vh auto;
+            }
+
+            .btn-add-playlist a{
+                color: white;
+            }
+        </style>
+    </main>
+</body>

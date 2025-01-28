@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Tracks</title>
+    <!-- <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css"> -->
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+        <main>
+
+            <h1>Home</h1>
+
+            <div class="title-button-holder">
+                <h2>Derniers artistes favoris</h2>
+                <button><a href="/top-artists">VOIR PLUS</a></button>
+            </div>
+
+            <div class="artists-container-home">
+                <% Home_infos_artists_datas.forEach(artist=> { %>
+                    <div class="artist-home">
+                        <a href="/artist/<%= artist.id %>">
+                            <div class="artist-image">
+                                <% if(artist.images.length> 0) { %>
+                                    <img src="<%= artist.images[0].url %>" alt="<%= artist.name %>">
+                                    <% } else { %>
+                                        <img src="../images/user-defaut-pp.jpg" alt="<%= artist.name %>">
+                                        <% } %>
+                            </div>
+                            <div>
+                                <h2 class="artist-name">
+
+                                    <%= artist.name %>
+
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+            </div>
+
+            <div class="title-button-holder">
+                <h2>Dernières musiques favorites</h2>
+                <button><a href="/top-tracks">VOIR PLUS</a></button>
+            </div>
+
+            <div class="artists-container-home">
+
+                <% Home_infos_tracks_datas.forEach(track=> { %>
+                    <div class="artist-home">
+                        <a href="/track/<%= track.id %>">
+                            <div class="artist-image">
+                                <% if(track.album.images[0].url){ %>
+                                    <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                                    <% } else{ %>
+                                        <img src="../images/user-defaut-pp.jpg" alt="<%= track.name %>">
+                                        <% } %>
+                            </div>
+                            <div id="home-track-infos">
+
+                                <h2 class="artist-name">
+                                    <%= track.name %>
+                                </h2>
+
+                                <% if (track.artists.length> 1) { %>
+                                    <% track.artists.forEach((artist, index)=> { %>
+                                        <% if (index===1) { %>
+                                            ft. <%= artist.name %>
+                                                <% } else if (index===2) { %>
+                                                    , <%= artist.name %>
+                                                        <% } else if (index===0) { %>
+                                                            <p>
+                                                                <%= artist.name %>
+                                                                    <% } %>
+                                                                        <% }); %>
+                                                                            - <%= track.album.name %>
+                                                            </p>
+                                                            <% } else { %>
+                                                                <p>
+                                                                    <%= track.artists[0].name %> - <%= track.album.name
+                                                                            %>
+                                                                </p>
+                                                                <% } %>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+            </div>
+        </main>
+
+        <script>
+            const npxPlugins = Plugins.Capacitor();
+
+            function launchApp() {
+
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const closewindows = urlParams.get('closewindow');
+                const spotify = urlParams.get('spotify');
+
+                if (closewindows == "true") {
+                    npxPlugins.AppLauncher.openUrl({ url: 'com.lyrics.app://info?spotify=' + spotify });
+                }
+
+            }
+
+            launchApp();
+
+            const registerNotifications = async () => {
+                let permStatus = await npxPlugins.PushNotifications.checkPermissions();
+
+                if (permStatus.receive === 'prompt') {
+                    permStatus = await npxPlugins.PushNotifications.requestPermissions();
+                }
+
+                if (permStatus.receive !== 'granted') {
+                    throw new Error('User denied permissions!');
+                }
+
+                await npxPlugins.PushNotifications.register();
+            }
+
+            registerNotifications();
+            
+        </script>
+
+        <script src="../test/h.js"></script>
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
+</html>

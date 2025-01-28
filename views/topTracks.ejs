@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Tracks</title>
+    <!-- <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css"> -->
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+    <main>
+
+        <div style="margin: 0px 3vw 0px 3vw; text-align: center; padding: 7rem 0; display: flex; flex-direction: column; align-items: center;">
+            <h1 id="h1Modif">Top 20 des musiques les plus écoutés</h1>
+            <p style="width: 62vw">Consultez et parcourez vos musiques favorites.</p>
+        </div>
+
+            <div class="button-container-timerange">
+                <button id="btn-recent" style="border-color: red;" class="btn-timerange-self" onclick="displayvisiblesection('shortt')">Récent</button>
+                <button id="btn-bi" class="btn-timerange-self" onclick="displayvisiblesection('midt')">Bi-mentuel</button>
+                <button id="btn-all" class="btn-timerange-self" onclick="displayvisiblesection('longt')">Toujours</button>
+            </div>
+
+        <section id="shortt" class="animate__animated animate__fadeIn">
+
+            <div class="tracks-container">
+
+                <% recentTopTracks.forEach(track=> { %>
+                    <div class="track">
+                        <div class="track-image">
+                            <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                        </div>
+                        <div class="track-info">
+                            <a href="/track/<%= track.id %>">
+                                <h2>
+                                    <%= track.name %>
+                                </h2>
+                            </a>
+                            <% if (track.artists.length> 1) { %>
+                                <% track.artists.forEach((artist, index)=> { %>
+                                    <% if (index===1) { %>
+                                        ft. <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                            <% } else if (index===2) { %>
+                                                , <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                    <% } else if (index===0) { %>
+                                                        <p>
+                                                            <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                                <% } %>
+                                                                    <% }); %>
+                                                                        - <%= track.album.name %>
+                                                        </p>
+                                                        <% } else { %>
+                                                            <p>
+                                                                <a href="/artist/<%= track.artists[0].id %>"><%= track.artists[0].name %></a> - <%= track.album.name %>
+                                                            </p>
+                                                            <% } %>
+                        </div>
+                        <div class="track-duration">
+                            <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000);
+                                const minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
+                                <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+
+        </section>
+
+
+        <section id="midt" class="section-visible animate__animated animate__fadeIn">
+            
+            <div class="tracks-container">
+
+                <% MidTermTopTracks.forEach(track=> { %>
+                    <div class="track">
+                        <div class="track-image">
+                            <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                        </div>
+                        <div class="track-info">
+                            <a href="/track/<%= track.id %>">
+                                <h2>
+                                    <%= track.name %>
+                                </h2>
+                            </a>
+                            <% if (track.artists.length> 1) { %>
+                                <% track.artists.forEach((artist, index)=> { %>
+                                    <% if (index===1) { %>
+                                        ft. <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                            <% } else if (index===2) { %>
+                                                , <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                    <% } else if (index===0) { %>
+                                                        <p>
+                                                            <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                                <% } %>
+                                                                    <% }); %>
+                                                                        - <%= track.album.name %>
+                                                        </p>
+                                                        <% } else { %>
+                                                            <p>
+                                                                <a href="/artist/<%= track.artists[0].id %>"><%= track.artists[0].name %></a> - <%= track.album.name %>
+                                                            </p>
+                                                            <% } %>
+                        </div>
+                        <div class="track-duration">
+                            <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000);
+                                const minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
+                                <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+        </section>
+
+        <section id="longt" class="section-visible animate__animated animate__fadeIn">
+
+            <div class="tracks-container">
+
+                <% longTermTopTracks.forEach(track=> { %>
+                    <div class="track">
+                        <div class="track-image">
+                            <img src="<%= track.album.images[0].url %>" alt="<%= track.name %>">
+                        </div>
+                        <div class="track-info">
+                            <a href="/track/<%= track.id %>">
+                                <h2>
+                                    <%= track.name %>
+                                </h2>
+                            </a>
+                            <% if (track.artists.length> 1) { %>
+                                <% track.artists.forEach((artist, index)=> { %>
+                                    <% if (index===1) { %>
+                                        ft. <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                            <% } else if (index===2) { %>
+                                                , <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                    <% } else if (index===0) { %>
+                                                        <p>
+                                                            <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                                <% } %>
+                                                                    <% }); %>
+                                                                        - <%= track.album.name %>
+                                                        </p>
+                                                        <% } else { %>
+                                                            <p>
+                                                                <a href="/artist/<%= track.artists[0].id %>"><%= track.artists[0].name %></a> - <%= track.album.name %>
+                                                            </p>
+                                                            <% } %>
+                        </div>
+                        <div class="track-duration">
+                            <% const durationMs=track.duration_ms; const durationSeconds=Math.floor(durationMs / 1000);
+                                const minutes=Math.floor(durationSeconds / 60); const seconds=durationSeconds % 60; %>
+                                <%= `${minutes}:${seconds.toString().padStart(2, '0' )}` %> <!-- Format MM:SS -->
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+        </section>
+
+
+    </main>
+
+    <style>
+        #h1Modif{
+            font-size: 20px;
+            margin: 3vw 45px 3vw;
+            text-align: center;
+            width: 60vw;
+            display: flex;
+            /* justify-content: center; */
+            
+        }
+    </style>
+
+    <script>
+        function displayvisiblesection(id) {
+            const h1Modif = document.getElementById("h1Modif");
+
+            if (id === "shortt") {
+                h1Modif.innerHTML = "Top 20 des titres les plus écoutés";
+                document.getElementById("midt").style.display = 'none';
+                document.getElementById("longt").style.display = 'none';
+                document.getElementById(id).style.display = 'block';
+                document.getElementById("btn-recent").style.borderColor = 'red';
+                document.getElementById("btn-bi").style.borderColor = 'white';
+                document.getElementById("btn-all").style.borderColor = 'white';
+            }
+
+            else if (id === "midt") {
+                h1Modif.innerHTML = "Top 20 des titres les plus écoutés";
+                document.getElementById("shortt").style.display = 'none';
+                document.getElementById("longt").style.display = 'none';
+                document.getElementById(id).style.display = 'block';
+                document.getElementById("btn-recent").style.borderColor = 'white';
+                document.getElementById("btn-bi").style.borderColor = 'red';
+                document.getElementById("btn-all").style.borderColor = 'white';
+            }
+
+            else if (id === "longt") {
+                h1Modif.innerHTML = "Top 20 des titres les plus écoutés";
+                document.getElementById("shortt").style.display = 'none';
+                document.getElementById("midt").style.display = 'none';
+                document.getElementById(id).style.display = 'block';
+                document.getElementById("btn-recent").style.borderColor = 'white';
+                document.getElementById("btn-bi").style.borderColor = 'white';
+                document.getElementById("btn-all").style.borderColor = 'red';
+                //r           
+            }
+
+        }
+        
+    </script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
+</html>

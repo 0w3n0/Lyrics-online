@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Tracks</title>
+    <!-- <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/home.css"> -->
+    <link rel="stylesheet" href="/css/h.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+</head>
+
+<body>
+    <%- include('header.ejs') %>
+        <div class="track-image-details" id="t-i-d-radar">
+            <h2 id="h2-radar">Radar de sorties</h2>
+            <h4 id="h4-radar">Retrouvez les dernières sorties de vos artistes favoris en tout simplicité.</h4>
+
+            <div id="preview-radar">
+                <% let foundFirstAlbum = false; %>
+                <div class="artists-container-home">
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>
+                            <% const albumsOfType = artist.filter(album => album.album_type === 'album'); %>
+                            <% if (albumsOfType.length > 0) { %>
+                                <% albumsOfType.forEach(album => { %>
+                                    <% const releaseDate = new Date(album.release_date); %>
+                                    <% console.log(`Je m'appelle ${album.name} et je suis sorti ${releaseDate}`);%>
+                                    <% if (releaseDate >= startDate && releaseDate <= endDate) { %>
+                                        <% if (!foundFirstAlbum) { %>
+                                            <div class="artist-home" id="album_t-i-d-radar">
+                                                <div class="artist-image">
+                                                    <img src="<%= album.images[0].url %>" alt="<%= album.name %>">
+                                                </div>
+                                                <div>
+                                                    <h2><%= album.name %></h2> 
+                                                    <h2 class="artist-name">
+                                                        <h3><a href="/artist/<%= album.artists[0].id %>"><%= album.artists[0].name %></a></h3> 
+                                                    </h2> 
+                                                </div>
+                                            </div>
+                                            <% foundFirstAlbum = true; %>
+                                        <% } else { %>
+                                        <% } %>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </div>
+                
+                <% let foundFirstSingle = false; %>
+                <div class="artists-container-home">
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>
+                            <% const albumsOfType = artist.filter(album => album.album_type === 'single'); %>
+                            <% if (albumsOfType.length > 0) { %>
+                                <% albumsOfType.forEach(album => { %>
+                                    <% const releaseDate = new Date(album.release_date); %>
+                                    <% console.log(`Je m'appelle ${album.name} et je suis sorti ${releaseDate}`);%>
+                                    <% if (releaseDate >= startDate && releaseDate <= endDate) { %>
+                                        <% if (!foundFirstSingle) { %>
+                                            <div class="artist-home" id="single_t-i-d-radar">
+                                                <div class="artist-image">
+                                                    <img src="<%= album.images[0].url %>" alt="<%= album.name %>">
+                                                </div>
+                                                <div>
+                                                    <h2><%= album.name %></h2> 
+                                                    <h2 class="artist-name">
+                                                        <h3><a href="/artist/<%= album.artists[0].id %>"><%= album.artists[0].name %></a></h3> 
+                                                    </h2> 
+                                                </div>
+                                            </div>
+                                            <% foundFirstSingle = true; %>
+                                        <% } else { %>
+                                        <% } %>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </div>        
+
+                <% let foundFirstEp = false; %>
+                <div class="artists-container-home">
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>
+                            <% const albumsOfType = artist.filter(album => album.album_type === 'single'); %>
+                            <% if (albumsOfType.length > 0) { %>
+                                <% albumsOfType.forEach(album => { %>
+                                    <% if (!foundFirstEp) { %>
+                                        <% if (album.total_tracks >= 2) { %>
+                                            <% const releaseDate = new Date(album.release_date); %>
+                                            <% console.log(`Je m'appelle ${album.name} et je suis sorti ${releaseDate}`);%>
+                                            <% if (releaseDate >= startDate && releaseDate <= endDate) { %>        
+                                                <div class="artist-home" id="ep_t-i-d-radar">
+                                                    <div class="artist-image">
+                                                        <img src="<%= album.images[0].url %>" alt="<%= album.name %>">
+                                                    </div>
+                                                    <div>
+                                                        <h2><%= album.name %></h2> 
+                                                        <h2 class="artist-name">
+                                                            <h3><a href="/artist/<%= album.artists[0].id %>"><%= album.artists[0].name %></a></h3> 
+                                                        </h2> 
+                                                    </div>
+                                                </div>
+                                                <% foundFirstEp = true; %>
+                                            <% } else { %>
+                                            <% } %>
+                                        <% } %>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </div>        
+            </div>
+        </div>
+        <main>
+            
+            
+
+            <div class="tracks-container" style="min-height: 100vh;">
+
+                <div style="display: flex; justify-content: center;">
+                <h2 class="h2-title" id="recent">Sorties récentes</h2>
+                </div>
+
+                <div id="btn-switch-holder">
+                    <div class="cbDiv">
+                        <input type="checkbox" id="singlecontainerCheckbox" checked>
+                        <label class="checkbox-container" for="singleCheckbox" id="singleCheckboxContainer">Singles</label>
+                    </div>
+                    
+                    <div class="cbDiv">
+                        <input type="checkbox" id="albumcontainerCheckbox" checked>
+                        <label class="checkbox-container" for="albumCheckbox" id="albumCheckboxContainer">Albums</label>
+                    </div>
+                    
+                    <div class="cbDiv">
+                        <input type="checkbox" id="epcontainerCheckbox" checked>
+                        <label class="checkbox-container" for="epCheckbox" id="epCheckboxContainer">EPs</label>
+                    </div>
+                </div>
+
+                <% const albumTypes={ 'album' : 'Albums' , 'single' : 'Singles' , 'compilation' : 'Compilations' , 'appears_on' : 'Apparitions' }; %>
+                    
+                <div id="albumcontainer" class="album-container animate__animated animate__fadeIn">
+                    <div style="display: flex; justify-content: center;">
+                        <h2 class="h2-title" id="h2-album">Albums</h2>
+                    </div>
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>
+                            <% const albumsOfType = artist.filter(album => album.album_type === 'album'); %>
+                            <% if (albumsOfType.length > 0) { %>
+                                <% albumsOfType.forEach(album => { %>
+                                    <% const releaseDate = new Date(album.release_date); %>
+                                    <% console.log(`Je m'appelle ${album.name} et je suis sorti ${releaseDate}`);%>
+                                    <% if (releaseDate >= startDate && releaseDate <= endDate) { %>
+                                        <div class="album-preset">
+                                            <div class="album-preset-image">
+                                                <img src="<%= album.images[0].url %>" alt="<%= album.name %>">
+                                            </div>
+                                            <div class="album-preset-info">
+                                                <button class="btn-add-playlist recupDatasInsert" data-id="<%= album.id %>" onclick="addAlbumToPlaylist('<%= album.id %>')">
+                                                    <i class="menu-icon ion-md-home"></i>
+                                                    <span class="menu-name" style="width: 16px;">
+                                                    <i class="material-icons" style="
+                                                        display: flex;
+                                                        justify-content: flex-end;
+                                                        padding-left: 19px;
+                                                    ">playlist_add</i></span>
+                                                    <span style="padding: 0px 0px 0px 10px;">Ajouter à la playlist</span>
+                                                </button>
+                                                <h2><%= album.name %></h2>
+                                                <h3><a href="/artist/<%= album.artists[0].id %>"><%= album.artists[0].name %></a></h3>
+                                                <h4><%= album.release_date %></h4>
+                                                <div class="tracks-section">
+            
+                                                    <!-- Affichez les cinq premières pistes -->
+                                                    <ul class="track-list">
+                                                        <% album.tracks.slice(0, 5).forEach(track=> { %>
+                                                            <li>
+                                                                <a href="/track/<%= track.id %>"><%= track.name %></a>
+                                                            </li>
+                                                        <% }); %>
+                                                    </ul>
+            
+                                                    <!-- Affichez le reste des pistes dans la div cachée -->
+                                                    <div class="hidden-tracks">
+                                                        <ul>
+                                                            <% album.tracks.slice(5).forEach(track=> { %>
+                                                                <li>
+                                                                    <a href="/track/<%= track.id %>"><%= track.name %></a>
+                                                                </li>
+                                                            <% }); %>
+                                                        </ul>
+                                                    </div>
+            
+                                                    <!-- Ajoutez un bouton "Afficher plus" -->
+                                                    <div class="btn-center-div">
+                                                        <button class="show-more-button" onclick="toggleTracks(this)">
+                                                            <div class="button-content">
+                                                                <span>Afficher plus</span>
+                                                                <i class="material-icons" id="arrow-icon">keyboard_arrow_down</i>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </div>
+                
+                <div id="singlecontainer" class="single-container animate__animated animate__fadeIn">         
+                    <div style="display: flex; justify-content: center;">
+                        <h2 class="h2-title" id="h2-single">Singles</h2>             
+                    </div>
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>            
+                            <% const singlesOfType = artist.filter(album => album.album_type === 'single'); %>               
+                            <% if (singlesOfType.length > 0) { %>   
+                                <% singlesOfType.forEach(single => { %> 
+                                    <% const releaseDate = new Date(single.release_date); %>
+                                    <% console.log(`Je m'appelle ${single.name} et je suis sorti ${releaseDate}`);%>
+                                    <% if (releaseDate >= startDate && releaseDate <= endDate) { %>              
+                                        <% if (single.total_tracks == 1) { %>
+                                            <% const trackIds = single.trackIds; 
+                                            console.log(`Voici les ids de l'single ${single.name} : ${trackIds}`);%>
+                                            <div class="track">
+                                                <div class="track-image">
+                                                    <img src="<%= single.images[0].url %>" alt="<%= single.name %>">
+                                                </div>
+                                                <div class="track-info">
+                                                    <% single.tracks.slice(0, 5).forEach(track=> { %>
+                                                        <li>
+                                                            <a href="/track/<%= track.id %>"><h2>
+                                                                <%= track.name %>
+                                                            </h2></a>
+                                                        </li>
+                                                    <% }); %>
+                                                    <% if (single.artists.length> 1) { %>
+                                                        <% single.artists.forEach((artist, index)=> { %>
+                                                            <% if (index===1) { %>
+                                                                ft. <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                            <% } else if (index===2) { %>
+                                                                , <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                            <% } else if (index===0) { %>
+                                                                <p>
+                                                                    <a href="/artist/<%= artist.id %>"><%= artist.name %></a>
+                                                            <% } %>
+                                                        <% }); %>
+                                                            - <%= single.name %>
+                                                        </p>
+                                                    <% } else { %>
+                                                            <p>
+                                                                <a href="/artist/<%= single.artists[0].id %>"><%= single.artists[0].name %></a> - <%= single.name %>
+                                                            </p>
+                                                    <% } %>
+                                                </div>
+                                                <div>
+                                                    <button class="btn-add-playlist-single recupDatasInsert" data-id="<%= single.id %>" onclick="addAlbumToPlaylist('<%= single.id %>')">
+                                                        <i class="menu-icon ion-md-home"></i>
+                                                        <span class="menu-name" style="width: 16px;">
+                                                        <i class="material-icons" style="
+                                                            display: flex;
+                                                            justify-content: flex-end;
+                                                            padding-left: 20px;
+                                                        ">playlist_add</i></span>   
+                                                    </button>                                                
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>    
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+
+                    
+                </div>
+
+                <div id="epcontainer" class="EP-container animate__animated animate__fadeIn">
+                    <div style="display: flex; justify-content: center;">
+                        <h2 class="h2-title" id="h2-ep">EPs</h2>
+                    </div>
+                    <% albumsByArtist.forEach(artist => { %>
+                        <% if (artist && artist.length > 0) { %>
+                            <% const EpsOfType = artist.filter(album => album.album_type === 'single'); %>
+                            <% if (EpsOfType.length > 0) { %>
+                                <% EpsOfType.forEach(ep => { %>
+                                    <% const releaseDate = new Date(ep.release_date); %>
+                                    <% console.log(`Je m'appelle ${ep.name} et je suis sorti ${releaseDate}`);%>
+                                    <% if (releaseDate >= startDate && releaseDate <= endDate) { %>
+                                        <% if (ep.total_tracks >= 2) { %>
+                                            <% const trackIds = ep.trackIds; 
+                                            console.log(`Voici les ids de l'ep ${ep.name} : ${trackIds}`);%>
+                                            <div class="album-preset">
+                                                <div class="album-preset-image">
+                                                    <img src="<%= ep.images[0].url %>" alt="<%= ep.name %>">
+                                                </div>
+                                                <div class="album-preset-info">
+                                                    <button class="btn-add-playlist recupDatasInsert" data-id="<%= ep.id %>" onclick="addAlbumToPlaylist('<%= ep.id %>')">
+                                                        <i class="menu-icon ion-md-home"></i>
+                                                        <span class="menu-name" style="width: 16px;">
+                                                        <i class="material-icons" style="
+                                                            display: flex;
+                                                            justify-content: flex-end;
+                                                            padding-left: 19px;
+                                                        ">playlist_add</i></span>
+                                                        <span style="padding: 0px 0px 0px 10px;">Ajouter à la playlist</span>
+                                                    </button>
+
+                                                    <h2><%= ep.name %></h2> <h3><a href="/artist/<%= ep.artists[0].id %>"><%= ep.artists[0].name %></a></h3>   <h4><%= ep.release_date %></h4>
+                                                    <div class="tracks-section">
+                                                        <!-- Affichez les cinq premières pistes -->
+                                                        <ul class="track-list">
+                                                            <% ep.tracks.slice(0, 5).forEach(track=> { %>
+                                                                <li>
+                                                                    <a href="/track/<%= track.id %>"><%= track.name %></a>
+                                                                </li>
+                                                            <% }); %>
+                                                        </ul>
+            
+                                                        <% if (ep.total_tracks > 5) { %> <!-- Affichez le reste des pistes dans la div cachée -->
+                                                            <div class="hidden-tracks">
+                                                                <ul>
+                                                                    <% ep.tracks.slice(5).forEach(track=> { %>
+                                                                        <li>
+                                                                            <a href="/track/<%= track.id %>"><%= track.name %></a>
+                                                                        </li>
+                                                                    <% }); %>
+                                                                </ul>
+                                                            </div>
+            
+                                                            <!-- Ajoutez un bouton "Afficher plus" -->
+                                                            <div class="btn-center-div">
+                                                                <button class="show-more-button" onclick="toggleTracks(this)">
+                                                                    <div class="button-content">
+                                                                        <span>Afficher plus</span>
+                                                                        <i class="material-icons" id="arrow-icon">keyboard_arrow_down</i>
+                                                                    </div>
+                                                                </button>
+                                                            </div>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } else {%>
+                                        <% } %>
+                                    <% } %>
+                                <% }); %>
+                            <% } %>
+                        <% } %>
+                    <% }); %>
+                </div>
+            </div>
+        </main>
+
+        <style>
+            .track-image-details {
+              position: relative;
+              /* width: 500px;
+              height: 300px; */
+              background: no-repeat center center;
+              background-image: url('../images/svg/MagicPattern.design.svg');
+              background-size: cover;
+            }
+    
+            .track-image-details::after {
+              content: "";
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              backdrop-filter: blur(10px);
+              pointer-events: none;
+            }
+
+            .recupDatasInsert{
+                padding-right: 3vw;
+            }
+
+            .album-preset-info .recupDatasInsert{
+                padding-right: 3vw;
+            }
+
+            .btn-add-playlist{
+                display: flex;
+                justify-content: center;
+                width: 78%;
+                border: 3px solid white;
+                border-radius: 90px;
+                background: black;
+                color: white;
+                border-radius: 90px;
+                align-items: center;
+                padding: 10px;
+                margin: 0 auto 4vh auto;
+            }
+
+            .btn-add-playlist-single{
+                display: flex;
+                justify-content: center;
+                border: 3px solid white;
+                border-radius: 90px;
+                background: black;
+                color: white;
+                border-radius: 50%;
+                align-items: center;
+                padding: 10px;
+                width: 12vw;
+                height: 12vw;
+                margin: auto 10px;
+            }
+
+            .h2-title{
+                font-size: 20px;
+                margin: 3vw 45px 3vw;
+                text-align: center;
+                background: beige;
+                border-radius: 25px;
+                padding: 10px;
+                text-transform: uppercase;
+                padding: 4vw;
+
+            }
+
+            #recent{
+                background: lavender;
+                font-size: 28px;
+            }
+
+          </style>
+
+        <script>
+            function toggleTracks(button) {
+                const parentSection = button.closest('.tracks-section'); // Trouve la section parente du bouton
+                const hiddenTracks = parentSection.querySelector('.hidden-tracks'); // Sélectionne la section des pistes cachées à l'intérieur de la section parente
+                const arrowIcon = button.querySelector('#arrow-icon');
+
+
+                if (hiddenTracks.style.maxHeight) {
+                    // La div est actuellement étendue, rétractez-la
+                    hiddenTracks.style.maxHeight = null;
+                    button.innerHTML = '<i class="material-icons" id="arrow-icon">keyboard_arrow_down</i> Afficher plus';
+                } else {
+                    // La div est actuellement rétractée, étendez-la
+                    hiddenTracks.style.maxHeight = hiddenTracks.scrollHeight + 'px';
+                    button.innerHTML = '<i class="material-icons" id="arrow-icon">keyboard_arrow_up</i> Réduire';
+                }
+            }
+                
+            document.addEventListener("DOMContentLoaded", function () {
+                
+                // Récupérez tous les enfants de la div
+                var albumcontainerChild = document.getElementById('albumcontainer').children;
+                var singlecontainerChild = document.getElementById('singlecontainer').children;
+                var epcontainerChild = document.getElementById('epcontainer').children;
+
+                // Vérifiez s'il y a exactement une balise h2
+                if (albumcontainerChild.length === 1 && albumcontainerChild[0].tagName.toLowerCase() === 'h2') {
+                    // Il y a une seule balise h2 dans la div
+                    console.log('Il y a une seule balise h2 dans la div.');
+                    document.getElementById('albumcontainerCheckbox').checked = false;
+                    updateDisplay(`albumcontainer`, `albumCheckboxContainer`);
+                    document.getElementById('h2-album').innerText = "";
+                }
+
+                // Vérifiez s'il y a exactement une balise h2
+                if (singlecontainerChild.length === 1 && singlecontainerChild[0].tagName.toLowerCase() === 'h2') {
+                    document.getElementById('singlecontainerCheckbox').checked = false;
+                    updateDisplay(`singlecontainer`, `singleCheckboxContainer`);
+                    console.log('La div est vide. Faire quelque chose...');
+                    document.getElementById('h2-single').innerText = "";
+                }
+
+                // Vérifiez s'il y a exactement une balise h2
+                if (epcontainerChild.length === 1 && epcontainerChild[0].tagName.toLowerCase() === 'h2') {
+                    // Il y a une seule balise h2 dans la div
+                    document.getElementById('epcontainerCheckbox').checked = false;
+                    updateDisplay(`epcontainer`, `epCheckboxContainer`);
+                    console.log('La div est vide. Faire quelque chose...');
+                    document.getElementById('h2-ep').innerText = "";
+                }
+                // Sélectionnez toutes les divs avec la classe "checkbox-container"
+                const checkboxContainers = document.querySelectorAll('.checkbox-container');
+
+                checkboxContainers.forEach(function (container) {
+                    // Récupérez l'ID de la checkbox associée à cette div
+                    const containerId = container.id.slice(0, -17);
+                    console.log(containerId);
+
+                    const containerIdChanged = containerId + "containerCheckbox";
+
+                    console.log(containerId + " " + containerIdChanged);
+
+                    // Ajoutez un gestionnaire d'événements pour le clic sur la div
+                    container.addEventListener('click', function () {
+                        // Récupérez la checkbox correspondante
+                        const checkbox = document.getElementById(containerIdChanged);
+
+                        // Inversez l'état de la checkbox
+                        checkbox.checked = !checkbox.checked;
+
+                        updateDisplay(`${containerId}container`, `${containerId}CheckboxContainer`);
+                    });
+                });
+                // Fonction pour mettre à jour l'affichage en fonction de l'état des cases à cocher
+                function updateDisplay(id, containerId) {
+                    console.log(id);
+                    // Récupérer l'état de la case à cocher correspondante
+                    const checkbox = document.getElementById(`${id.toLowerCase()}Checkbox`);
+                    const container = document.getElementById(containerId);
+                    
+                    // Afficher ou masquer la div en fonction de l'état de la case à cocher
+                    document.getElementById(id).style.display = checkbox.checked ? 'block' : 'none';
+                    // Mettre à jour l'opacité en fonction de la sélection
+                    container.style.opacity = checkbox.checked ? 1 : 0.5;
+                }
+            });
+            
+            // Au clic sur l'icône pour ajouter à la playlist
+            // document.getElementById('yourAddToPlaylistIconId').addEventListener('click', async () => {
+            
+            // playlistUtils.js
+
+            document.getElementById('yourAddToPlaylistIconId').addEventListener('click', async () => {
+                try {
+                    // Effectuez une requête vers la route côté serveur pour vérifier l'existence de la playlist
+                    const response = await fetch('/check-playlist');
+                    const result = await response.json();
+                    console.log("result :" + result);
+
+                    if (result.exists) {
+                        // La playlist existe, vous pouvez ajouter la musique à la playlist ici
+                        console.log('La playlist existe, ajoutez la musique à la playlist.');
+                    } else {
+                        // La playlist n'existe pas, vous pouvez la créer et ajouter la musique
+                        console.log('La playlist n\'existe pas, créez la playlist et ajoutez la musique.');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors de la vérification de l\'existence de la playlist :', error);
+                }
+            });
+
+            async function addAlbumToPlaylist(album_Id) {
+                try {
+                    afficherMessage("Ajouté avec succès");
+                    let playlistId = 0;
+                // Effectuez une requête vers la route côté serveur pour vérifier l'existence de la playlist
+                    const response_check = await fetch(`/check-playlist`);
+                    const result_check = await response_check.json();
+
+                    console.log(result_check);
+
+                    if (result_check.exists) {
+                        // La playlist existe, vous pouvez ajouter la musique à la playlist ici
+                        console.log('La playlist existe, ajoutez la musique à la playlist.');
+                        // Ajoutez ici la logique pour ajouter la musique à la playlist existante
+
+                        playlistId = result_check.exists.id;
+                        console.log(playlistId);
+                    } else {
+                        // La playlist n'existe pas, vous pouvez la créer et ajouter la musique
+                        console.log('La playlist n\'existe pas, créez la playlist et ajoutez la musique.');
+
+                        // Effectuez une nouvelle requête pour créer la playlist
+                        const createPlaylistResponse = await fetch('/create-playlist', {
+                            method: 'POST',
+                            headers: {
+                            'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ playlistId }),
+                        });
+
+                        const createPlaylistResult = await createPlaylistResponse.json();
+                        console.log(createPlaylistResult);
+                        playlistId = createPlaylistResult.playlist.id;
+
+                        if (createPlaylistResult.success) {
+                            
+                            console.log('Playlist créée avec succès. Ajoutez la musique à la playlist.');
+
+                        } else {
+                            console.error('Erreur lors de la création de la playlist :', createPlaylistResult.error);
+                        }
+                    }
+
+                    // Utilisez fetch pour appeler la nouvelle route sans recharger la page
+                    const response = await fetch('/add-album-to-playlist', {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                        albumId: album_Id,
+                        playlistId : playlistId, // Remplacez par l'ID de l'album que vous souhaitez ajouter
+                        }),
+                    });
+
+                    const result = await response.json();
+                
+                // Vous pouvez ajouter ici du code pour gérer la réponse si nécessaire
+                } catch (error) {
+                console.error('Erreur lors de l\'ajout de l\'album à la playlist : ', error);
+                // Vous pouvez ajouter ici du code pour gérer les erreurs si nécessaire
+                }
+            }
+        </script>
+        
+        <div id="successMessage" class="animate__animated">Ajouté avec succès</div>
+
+        <script>
+        function afficherMessage(jesuislemsg) {
+            var message = document.getElementById('successMessage');
+
+            message.innerText = jesuislemsg;
+            
+            // Afficher le message
+            message.style.opacity = '1';
+
+            // Disparaître après 3 secondes
+            setTimeout(function() {
+                
+                message.style.opacity = '0';
+
+            }, 1000);
+        }
+
+        </script>
+        <style>
+        /* Style du message temporaire */
+        #successMessage {
+            position: fixed;
+            top: calc(7vh + 4vh);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 5px;
+            opacity: 0;
+            text-align: center;
+            width: 60vw;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 3;
+        }
+        </style>
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+</body>
+
+</html>
+

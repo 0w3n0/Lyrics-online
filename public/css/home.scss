@@ -1,0 +1,281 @@
+/* styles.css */
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    background-image: url("../images/svg/MagicPattern.design.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+.logo img {
+    max-width: 50px;
+    /* Taille maximale du logo */
+}
+
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.user span {
+    margin-right: 10px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 1vw;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+
+.original-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: black;
+    font-size: 1.25rem;
+    border-radius: 70px;
+    width: 200px;
+    height: 55px;
+    position: relative;
+    transition: 0.3s;
+    background-color: inherit;
+    box-shadow: 3px 3px 11px 2px rgba(0, 0, 0, 0.5);
+}
+
+.original-button::before,
+.original-button::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border: 1px solid #000000;
+    border-radius: 70px;
+    width: 100%;
+    height: 100%;
+    transition: .3s;
+}
+
+.original-button::before {
+    top: -2px;
+    left: -2px;
+}
+
+.original-button::after {
+    top: 2px;
+    left: 2px;
+}
+
+.original-button:hover::before,
+.original-button:hover::after {
+    top: 0;
+    left: 0;
+}
+
+#homepage {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 0px 0px 0px 7vw;
+}
+
+h1 {
+    font-size: 4.25rem;
+    margin: 0px 0px 4vh 0px;
+    color: transparent;
+    /* Rend le texte invisible */
+    background-image: linear-gradient(45deg,
+            hsl(215deg 100% 90%) 0%,
+            hsl(219deg 100% 90%) 6%,
+            hsl(226deg 100% 90%) 12%,
+            hsl(237deg 100% 91%) 17%,
+            hsl(253deg 100% 91%) 22%,
+            hsl(269deg 100% 90%) 27%,
+            hsl(283deg 100% 89%) 31%,
+            hsl(295deg 100% 87%) 35%,
+            hsl(306deg 100% 86%) 39%,
+            hsl(313deg 100% 85%) 42%,
+            hsl(320deg 100% 84%) 46%,
+            hsl(327deg 100% 82%) 50%,
+            hsl(335deg 100% 81%) 54%,
+            hsl(343deg 100% 80%) 58%,
+            hsl(352deg 100% 80%) 62%,
+            hsl(2deg 100% 79%) 67%,
+            hsl(11deg 100% 75%) 72%,
+            hsl(18deg 100% 71%) 78%,
+            hsl(24deg 100% 67%) 83%,
+            hsl(29deg 100% 63%) 89%,
+            hsl(34deg 100% 58%) 94%,
+            hsl(40deg 100% 50%) 100%);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+// VOIR POUR UNE MEDIA QUERY
+
+// .original-button {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     line-height: 1;
+//     text-decoration: none;
+//     text-transform: uppercase;
+//     color: black;
+//     font-size: 3.5rem;
+//     border-radius: 70px;
+//     width: 500px;
+//     height: 110px;
+//     position: relative;
+//     transition: 0.3s;
+//     background-color: inherit;
+//     box-shadow: 3px 3px 11px 2px rgba(0, 0, 0, 0.5);
+// }
+
+// .original-button::before,
+// .original-button::after {
+//     content: "";
+//     display: block;
+//     position: absolute;
+//     border: 1px solid #000000;
+//     border-radius: 70px;
+//     width: 100%;
+//     height: 100%;
+//     transition: .3s;
+// }
+
+// .original-button::before {
+//     top: -5px;
+//     left: -5px;
+// }
+
+// .original-button::after {
+//     top: 5px;
+//     left: 5px;
+// }
+
+// .original-button:hover::before,
+// .original-button:hover::after {
+//     top: 0;
+//     left: 0;
+// }
+
+// #homepage {
+//     display: flex;
+//     flex-direction: column;
+//     // align-items: center;
+//     justify-content: center;
+//     height: 100vh;
+//     padding: 0px 0px 0px 7vw;
+// }
+
+// h1 {
+//     font-size: 10rem;
+//     margin: 0px 0px 3vh 0px;
+//     color: transparent;
+//     /* Rend le texte invisible */
+//     background-image: linear-gradient(45deg,
+//             hsl(215deg 100% 90%) 0%,
+//             hsl(219deg 100% 90%) 6%,
+//             hsl(226deg 100% 90%) 12%,
+//             hsl(237deg 100% 91%) 17%,
+//             hsl(253deg 100% 91%) 22%,
+//             hsl(269deg 100% 90%) 27%,
+//             hsl(283deg 100% 89%) 31%,
+//             hsl(295deg 100% 87%) 35%,
+//             hsl(306deg 100% 86%) 39%,
+//             hsl(313deg 100% 85%) 42%,
+//             hsl(320deg 100% 84%) 46%,
+//             hsl(327deg 100% 82%) 50%,
+//             hsl(335deg 100% 81%) 54%,
+//             hsl(343deg 100% 80%) 58%,
+//             hsl(352deg 100% 80%) 62%,
+//             hsl(2deg 100% 79%) 67%,
+//             hsl(11deg 100% 75%) 72%,
+//             hsl(18deg 100% 71%) 78%,
+//             hsl(24deg 100% 67%) 83%,
+//             hsl(29deg 100% 63%) 89%,
+//             hsl(34deg 100% 58%) 94%,
+//             hsl(40deg 100% 50%) 100%);
+
+//     -webkit-background-clip: text;
+//     -webkit-text-fill-color: transparent;
+// }
+
+// #sub-button {
+//     font-size: 2.5rem;
+//     padding: 7vh 4vw 0px 0px;
+// }
+
+@media only screen and (min-width : 1224px) {
+    #homepage {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+
+        #sub-button {
+            font-size: 5rem;
+            padding: 0px 5vw 0px 15vw;
+        }
+    }
+
+    .original-button {
+        width: 300px;
+        height: 70px;
+        font-size: 2rem;
+    }
+
+    h1 {
+        font-size: 8rem;
+    }
+
+}

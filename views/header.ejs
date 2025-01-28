@@ -1,0 +1,258 @@
+<header class="header" id="header">
+    <nav class="navbar container">
+        <a href="/home" class="brand logo_lyrics">
+            <img class="ppquipp" src="../images/logo_lyrics.png" alt="">
+        </a>
+        <!-- <a href="/home" id="title">LYRICS</a> -->
+        <a href="#" class="brand">
+            <% if (pp.images[0]) { %>
+                <img class="ppquipp" id="touch-user" src="<%= pp.images[0].url %>" alt="" onclick="openMenu()">
+                <% } else { %>
+                    <img class="ppquipp" id="touch-user" src="../images/user-defaut-pp.jpg" alt="" onclick="openMenu()">
+                    <% } %>
+        </a>
+
+        <div id="content-container"
+            style="position: fixed; inset: 0; padding-top: 100vh; overflow-y: hidden; pointer-events: none; z-index: 1">
+            <div class="user-menu" style="position: relative;">
+                <div class="user-menu-header">
+                    <a href="#" class="brand">
+                        <% if (pp.images[0]) { %>
+                            <img class="ppquipp" src="<%= pp.images[0].url %>" alt="">
+                            <% } else { %>
+                                <img class="ppquipp" src="../images/user-defaut-pp.jpg" alt="">
+                                <% } %>
+                    </a>
+                    <!-- <a href="/home" class="brand logo_lyrics" id="">
+                    <img class="ppquipp" src="../images/logo_lyrics.png" alt="">
+                </a> -->
+                    <p>
+                        <%= displayName %>
+                    </p>
+                </div>
+
+                <ul style="    display: flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                height: 20vh;">
+                    <li><a href="<%= pp.external_urls.spotify %>">Consulter mon profil</a></li>
+
+                    <li><a href="/lyrics-playlist">Consulter ma playlist LyricS</a></li>
+
+                    <li><a href="#!" style="
+                        position: absolute;
+                        bottom: 5vh;
+                        left: 35%;
+                        background: #ff6969;
+                        border-radius: 10px;
+                        padding: 10px;
+                        color: black;" 
+                        onclick="logout()">Deconnexion</a></li>
+                    <style>
+                        #playlist-container {
+                            display: flex;
+                            flex-direction: column;
+                            margin: 10px;
+                        }
+
+                        .song {
+                            margin: 5px;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            cursor: move;
+                        }
+                    </style>
+                </ul>
+            </div>
+
+            <!-- <a href="/logout">Déconnexion</a> -->
+
+        </div>
+
+        <div class="menu" id="menu">
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/home" class="menu-link is-active">
+                        <i class="menu-icon ion-md-contact"></i>
+                        <span class="menu-name"><i class="material-icons">home</i></span>
+                    </a>
+                </li>
+                <!-- <li class="menu-item">
+                    <a href="/top-tracks" class="menu-link">
+                        <i class="menu-icon ion-md-home"></i>
+                        <span class="menu-name"><i class="material-icons">portrait</i></span>
+                    </a>
+                </li> -->
+                <li class="menu-item">
+                    <a href="/search" class="menu-link">
+                        <i class="menu-icon ion-md-search"></i>
+                        <span class="menu-name"><i class="material-icons">search</i></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/radar" class="menu-link">
+                        <i class="menu-icon ion-md-search"></i>
+                        <span class="menu-name"><i class="material-icons">radio</i></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/following" class="menu-link">
+                        <i class="menu-icon ion-md-search"></i>
+                        <span class="menu-name"><i class="material-icons">turned_in_not</i></span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/blindtest-selector" class="menu-link">
+                        <i class="menu-icon ion-md-search"></i>
+                        <span class="menu-name"><i class="material-icons">audiotrack</i></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js">
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Vérifiez si l'URL actuelle correspond à la page radar
+        if (window.location.pathname === '/radar') {
+            // Désactivez le lien en supprimant l'attribut href
+            var radarLink = document.querySelector('.menu-item a[href="/radar"]');
+            radarLink.removeAttribute('href');
+            radarLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            radarLink.classList.add('is-active');
+
+            let radarIconLocation = document.querySelector('.is-active');
+            radarIconLocation.classList.remove('is-active');
+
+        }
+
+        if (window.location.pathname === '/search') {
+            // Désactivez le lien en supprimant l'attribut href
+            var searchLink = document.querySelector('.menu-item a[href="/search"]');
+            searchLink.removeAttribute('href');
+            searchLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            searchLink.classList.add('is-active');
+
+            let searchIconLocation = document.querySelector('.is-active');
+            searchIconLocation.classList.remove('is-active');
+
+        }
+
+        if (window.location.pathname === '/top-tracks') {
+            // Désactivez le lien en supprimant l'attribut href
+            var toptracksLink = document.querySelector('.menu-item a[href="/top-tracks"]');
+            toptracksLink.removeAttribute('href');
+            toptracksLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            toptracksLink.classList.add('is-active');
+
+            let toptracksIconLocation = document.querySelector('.is-active');
+            toptracksIconLocation.classList.remove('is-active');
+
+        }
+
+        if (window.location.pathname === '/top-artists') {
+            // Désactivez le lien en supprimant l'attribut href
+            var topartistsLink = document.querySelector('.menu-item a[href="/top-artists"]');
+            topartistsLink.removeAttribute('href');
+            topartistsLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            topartistsLink.classList.add('is-active');
+
+            let topartistsIconLocation = document.querySelector('.is-active');
+            topartistsIconLocation.classList.remove('is-active');
+
+        }
+
+        if (window.location.pathname === '/top-menu') {
+            // Désactivez le lien en supprimant l'attribut href
+            var topmenuLink = document.querySelector('.menu-item a[href="/top-menu"]');
+            topmenuLink.removeAttribute('href');
+            topmenuLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            topmenuLink.classList.add('is-active');
+
+            let topmenuIconLocation = document.querySelector('.is-active');
+            topmenuIconLocation.classList.remove('is-active');
+
+        }
+
+        if (window.location.pathname === '/following') {
+            // Désactivez le lien en supprimant l'attribut href
+            var followingLink = document.querySelector('.menu-item a[href="/following"]');
+            followingLink.removeAttribute('href');
+            followingLink.classList.add('disabled-link'); // Vous pouvez également ajouter une classe pour styliser le lien désactivé
+            followingLink.classList.add('is-active');
+
+            let followingIconLocation = document.querySelector('.is-active');
+            followingIconLocation.classList.remove('is-active');
+
+        }
+    });
+
+    let prevScrollPos = window.scrollY;
+
+    window.onscroll = function () {
+        const currentScrollPos = window.scrollY;
+
+        if (currentScrollPos > 100) {
+            if (prevScrollPos > currentScrollPos) {
+                // L'utilisateur remonte, donc le header est visible
+                document.querySelector("header").style.top = "0";
+            } else {
+                // L'utilisateur descend, donc rétractez le header
+                document.querySelector("header").style.top = "-80px";
+            }
+        } else {
+            // Le défilement est inférieur à 100 pixels, donc le header est toujours visible
+            document.querySelector("header").style.top = "0";
+        }
+
+        prevScrollPos = currentScrollPos;
+    };
+
+    let toggleMenu = false;
+
+    var openMenu = function () {
+        console.log("clicked");
+        if (!toggleMenu) {
+            $("#content-container").css({ "pointer-events": "all", "overflow-y": "auto" });
+            $("#content-container").animate({ scrollTop: window.innerHeight }, 100, function () {
+                toggleMenu = true;
+            });
+            $("body").css({ "overflow-y": "hidden" });
+        }
+        else {
+            closeMenu();
+        }
+    }
+
+    var closeMenu = function () {
+        $("#content-container").css({ "pointer-events": "none", "overflow-y": "hidden" });
+        $("#content-container").animate({ scrollTop: 0 }, 100, function () {
+            toggleMenu = false;
+        });
+        $("body").css({ "overflow-y": "auto" });
+    }
+
+    $("#content-container").on("scroll", function () {
+        const scrollPercentage = (window.innerHeight - $(this).scrollTop()) / window.innerHeight * 100;
+        console.log(Math.round(scrollPercentage));
+
+        if (scrollPercentage >= 90 && toggleMenu == true) {
+            closeMenu();
+        }
+
+    });
+
+    $(document).on("click", function (event) {
+        if ($(event.target).closest(".user-menu").length === 0 && toggleMenu) {
+            closeMenu();
+        }
+    });
+
+    function logout() {
+        localStorage.clear();
+        window.location.href = "/logout";
+    }
+</script>
